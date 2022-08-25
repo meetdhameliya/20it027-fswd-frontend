@@ -3,9 +3,8 @@ import { Card, Container, Table, ButtonGroup, Button } from "react-bootstrap";
 import axios from "axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit, faTrash } from "@fortawesome/free-solid-svg-icons";
-import {Link} from 'react-router-dom'
 
-export default function StudentList(props) {
+export default function StudentList() {
   const [students, setStudents] = useState([]);
 
   useEffect(() => {
@@ -18,17 +17,6 @@ export default function StudentList(props) {
       .then((response) => setStudents(response.data))
       .catch((error) => alert(error));
   };
-
-  let deleteStudent = (studentId) => {
-    axios.delete("http://localhost:8080/student/"+studentId)
-    .then(response=> {
-      if (response.data !== null){
-        props.showAlert("success", "Record deleted successfully")
-        setStudents(students.filter(student=>student.id!==studentId));
-      }
-    })
-  }
-
   return (
     <div className="my-3">
       <Container>
@@ -52,15 +40,14 @@ export default function StudentList(props) {
                 </tr>
               ) : (
                 students.map((student)=>
-                <tr key={student.id}>
+                <tr>
                   <td>{student.id}</td>
                   <td>{student.name}</td>
                   <td>{student.address}</td>
                   <td>
                     <ButtonGroup>
-                      <Link to={"/student/"+student.id}><Button size="sm" variant="outline-primary"><FontAwesomeIcon icon={faEdit}> Edit </FontAwesomeIcon></Button></Link>{ ' '}
-                      <Button size="sm" variant="outline-danger" onClick={deleteStudent.bind(this,student.id)}><FontAwesomeIcon icon={faTrash}> Delete </FontAwesomeIcon></Button>
-                      {/* <Button size="sm" variant="outline-danger" onClick={()=>deleteStudent(student.id)}><FontAwesomeIcon icon={faTrash}> Delete </FontAwesomeIcon></Button> */}
+                      <Button size="sm" variant="outline-primary"><FontAwesomeIcon icon={faEdit}> Edit </FontAwesomeIcon></Button>{ ' '}
+                      <Button size="sm" variant="outline-danger"><FontAwesomeIcon icon={faTrash}> Delete </FontAwesomeIcon></Button>
                     </ButtonGroup>
                   </td>
                 </tr>
